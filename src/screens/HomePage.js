@@ -1,102 +1,36 @@
-import * as React from 'react'
-import { ScrollView, View, Text, Image } from 'react-native'
+import React, { useEffect, useState } from 'react'
+import { ScrollView, View, Text, Image, TouchableOpacity } from 'react-native'
 import { AntDesign } from '@expo/vector-icons'
+import { EvilIcons } from '@expo/vector-icons'
 
-function isOdd(num) { return num % 2;}
+function HomeScreen({ navigation, data }) {
 
-function HomeScreen() {
-  const contacts = [
-    { 
-      id: 1,
-      name: "Roberto Gallego",
-      number: "0645678957",
-      image: "",
-    },
-    { 
-      id: 2,
-      name: "Margaux Josso",
-      number: "0645678957",
-      image: "",
-    },
-    { 
-      id: 3,
-      name: "Patricia Riveros",
-      number: "0645678957",
-      image: "",
-    },
-    { 
-      id: 4,
-      name: "Roberto Gallego",
-      number: "0645678957",
-      image: "",
-    },
-    { 
-      id: 5,
-      name: "Margaux Josso",
-      number: "0645678957",
-      image: "",
-    },
-    { 
-      id: 6,
-      name: "Patricia Riveros",
-      number: "0645678957",
-      image: "",
-    },
-    { 
-      id: 1,
-      name: "Roberto Gallego",
-      number: "0645678957",
-      image: "",
-    },
-    { 
-      id: 2,
-      name: "Margaux Josso",
-      number: "0645678957",
-      image: "",
-    },
-    { 
-      id: 3,
-      name: "Patricia Riveros",
-      number: "0645678957",
-      image: "",
-    },
-    { 
-      id: 4,
-      name: "Roberto Gallego",
-      number: "0645678957",
-      image: "",
-    },
-    { 
-      id: 5,
-      name: "Margaux Josso",
-      number: "0645678957",
-      image: "",
-    },
-    { 
-      id: 6,
-      name: "Patricia Riveros",
-      number: "0645678957",
-      image: "",
-    },
-  ]
-
-  const strAscending = [...contacts].sort((a, b) =>
+  const strAscending = [...data].sort((a, b) =>
     a.name > b.name ? 1 : -1,
   )
 
   return (
-    <ScrollView style={{ backgroundColor: "#636363" }}>
-      {strAscending.map((contact, index) => {
+    <ScrollView keyboardShouldPersistTaps="true" style={{ backgroundColor: "#636363" }}>
+      {strAscending.flatMap((contact, index) => {
+        console.log(contact.image.length)
         return (
-          <View style={{ flex: 1, width: "100%" }} index={contact.id}>
+          <TouchableOpacity delayPressIn={30} style={{ flex: 1, width: "100%" }} key={index} onPress={() => navigation.navigate('Contact', {contact})}>
             <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between", padding: 10, backgroundColor: index % 2 == 1 ? "#6E6E6E": "#636363" }}>
               <View style={{ flexDirection: "row"}}>
-                <Image 
-                source={{
-                  uri: 'https://raw.githubusercontent.com/AboutReact/sampleresource/master/old_logo.png'
-                }} 
-                style={{width: 50, height: 50, borderRadius: 50 / 2}} 
-                />
+                { contact.image.length > 0 
+                  ? <Image 
+                      source={{
+                        uri: contact.image
+                      }} 
+                      style={{width: 50, height: 50, borderRadius: 50 / 2}} 
+                    />
+                  : <Image 
+                      source={{
+                        uri: 'https://cdn-icons.flaticon.com/png/512/3899/premium/3899618.png?token=exp=1658327535~hmac=f72ddfcb626533c8ef556869dcc9b6a1'
+                      }} 
+                      style={{width: 50, height: 50, borderRadius: 50 / 2}} 
+                    />
+                }
                 <View style={{ paddingHorizontal: 20 }}>
                   <Text style={{ fontSize: 20, color: "#E8E8E8" }} >{contact.name}</Text>
                   <Text style={{ color: "#E8E8E8" }}>{contact.number}</Text>
@@ -105,7 +39,7 @@ function HomeScreen() {
               <AntDesign name="right" size={24} color="#E8E8E8" />
             </View>
             <View style={{flexDirection: 'row', alignItems: 'center', flex: 1, height: 1, backgroundColor: 'grey'}} />
-          </View>
+          </TouchableOpacity>
         )
       })}
     </ScrollView>

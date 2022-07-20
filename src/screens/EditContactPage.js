@@ -5,7 +5,7 @@ import { AntDesign } from '@expo/vector-icons'
 import { Feather } from '@expo/vector-icons'
 import { MaterialIcons } from '@expo/vector-icons'
 
-function ContactScreen({ route }) {
+function EditContactScreen({ route }) {
   const { contact } = route.params;
 
   return (
@@ -25,24 +25,6 @@ function ContactScreen({ route }) {
             <Text style={{ color: '#fff', fontSize: 15, marginTop: 10  }}>Phone number</Text>
             <Text style={{ color: '#fff', fontSize: 25, marginBottom: 10 }}>{contact.number}</Text>
           </View>
-        </View>
-        <View style={{ flexDirection: "row", alignItems: 'center', justifyContent: "space-evenly", width: "100%", paddingTop: 20 }}>
-          <TouchableOpacity onPress={() => alert('This is a button!')} style={{ justifyContent: 'center', marginHorizontal: 5, backgroundColor: '#388514', borderRadius: 6, paddingVertical: 10, paddingHorizontal: 12, flex: 1 }}>
-            <Ionicons name="call" size={24} style={{ color: '#fff', alignSelf: "center", marginBottom: 6 }}/>
-            <Text style={{ color: '#fff', alignSelf: "center" }}>Call</Text>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => alert('This is a button!')} style={{ justifyContent: 'center', backgroundColor: '#6E6E6E', borderRadius: 6, paddingVertical: 10, paddingHorizontal: 12, flex: 1 }}>
-            <AntDesign name="message1" size={24} style={{ color: '#fff', alignSelf: "center", marginBottom: 6 }}/>
-            <Text style={{ color: '#fff', alignSelf: "center" }}>Message</Text>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => alert('This is a button!')} style={{ justifyContent: 'center', marginHorizontal: 5, backgroundColor: '#6E6E6E', borderRadius: 6, paddingVertical: 10, paddingHorizontal: 12, flex: 1 }}>
-            <Feather name="video" size={24} style={{ color: '#fff', alignSelf: "center", marginBottom: 6 }}/>
-            <Text style={{ color: '#fff', alignSelf: "center" }}>Video</Text>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => alert('This is a button!')} style={{ justifyContent: 'center', marginRight: 5, backgroundColor: '#6E6E6E', borderRadius: 6, paddingVertical: 10, paddingHorizontal: 12, flex: 1 }}>
-            <MaterialIcons name="alternate-email" size={24} style={{ color: '#fff', alignSelf: "center", marginBottom: 6 }}/>
-            <Text style={{ color: '#fff', alignSelf: "center" }}>E-mail</Text>
-          </TouchableOpacity>
         </View>
         <TouchableOpacity style={{ borderRadius: 6, backgroundColor: '#6E6E6E', marginTop: 20, width: 350, alignItems: 'center'  }}>
             <Text style={{ color: '#fff', fontSize: 15, marginVertical: 10 }}>Edit contact</Text>
