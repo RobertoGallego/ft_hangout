@@ -1,48 +1,81 @@
 import React, { useEffect, useState } from 'react'
-import { ScrollView, View, Text, Image, TouchableOpacity } from 'react-native'
+import { ScrollView, View, Text, Image, TouchableOpacity, Pressable } from 'react-native'
 import { AntDesign } from '@expo/vector-icons'
-import { EvilIcons } from '@expo/vector-icons'
+import { Entypo } from '@expo/vector-icons' 
+import { MaterialCommunityIcons } from '@expo/vector-icons'
+import { Ionicons } from '@expo/vector-icons'
 
 function HomeScreen({ navigation, data }) {
-
   const strAscending = [...data].sort((a, b) =>
     a.name > b.name ? 1 : -1,
   )
 
   return (
+    <View style={{ flex: 1 }}>
     <ScrollView keyboardShouldPersistTaps="true" style={{ backgroundColor: "#636363" }}>
-      {strAscending.flatMap((contact, index) => {
-        console.log(contact.image.length)
-        return (
-          <TouchableOpacity delayPressIn={30} style={{ flex: 1, width: "100%" }} key={index} onPress={() => navigation.navigate('Contact', {contact})}>
-            <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between", padding: 10, backgroundColor: index % 2 == 1 ? "#6E6E6E": "#636363" }}>
-              <View style={{ flexDirection: "row"}}>
-                { contact.image.length > 0 
-                  ? <Image 
-                      source={{
-                        uri: contact.image
-                      }} 
-                      style={{width: 50, height: 50, borderRadius: 50 / 2}} 
-                    />
-                  : <Image 
-                      source={{
-                        uri: 'https://cdn-icons.flaticon.com/png/512/3899/premium/3899618.png?token=exp=1658327535~hmac=f72ddfcb626533c8ef556869dcc9b6a1'
-                      }} 
-                      style={{width: 50, height: 50, borderRadius: 50 / 2}} 
-                    />
-                }
-                <View style={{ paddingHorizontal: 20 }}>
-                  <Text style={{ fontSize: 20, color: "#E8E8E8" }} >{contact.name}</Text>
-                  <Text style={{ color: "#E8E8E8" }}>{contact.number}</Text>
+        {strAscending.flatMap((contact, index) => {
+          return (
+            <TouchableOpacity delayPressIn={30} style={{ flex: 1, width: "100%" }} key={index} onPress={() => navigation.navigate('Contact', {contact})}>
+              <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between", padding: 10, backgroundColor: index % 2 == 1 ? "#6E6E6E": "#636363" }}>
+                <View style={{ flexDirection: "row"}}>
+                  { contact.image.length > 0 
+                    ? <Image 
+                        source={{
+                          uri: contact.image
+                        }} 
+                        style={{width: 50, height: 50, borderRadius: 50 / 2}} 
+                      />
+                    : <Image 
+                        source={{
+                          uri: 'https://cdn-icons.flaticon.com/png/512/3899/premium/3899618.png?token=exp=1658327535~hmac=f72ddfcb626533c8ef556869dcc9b6a1'
+                        }} 
+                        style={{width: 50, height: 50, borderRadius: 50 / 2}} 
+                      />
+                  }
+                  <View style={{ paddingHorizontal: 20 }}>
+                    <Text style={{ fontSize: 20, color: "#E8E8E8" }} >{contact.name}</Text>
+                    <Text style={{ color: "#E8E8E8" }}>{contact.number}</Text>
+                  </View>
                 </View>
+                <AntDesign name="right" size={24} color="#E8E8E8" />
               </View>
-              <AntDesign name="right" size={24} color="#E8E8E8" />
-            </View>
-            <View style={{flexDirection: 'row', alignItems: 'center', flex: 1, height: 1, backgroundColor: 'grey'}} />
-          </TouchableOpacity>
-        )
-      })}
+              <View style={{flexDirection: 'row', alignItems: 'center', flex: 1, height: 1, backgroundColor: 'grey'}} />
+            </TouchableOpacity>
+          )
+        })}
+      
     </ScrollView>
+    <View style={{ paddingVertical: 15, backgroundColor: '#989898', width: "100%", flexDirection: "row", justifyContent: "space-around" }}>
+      <Pressable
+          style={{ alignItems: 'center' }}
+          onPress={() => { navigation.navigate('NewContact', {})}}
+        > 
+          <Entypo name="plus" size={24} color="white" />
+          <Text style={{ color: "#fff" }}>New contact</Text>
+      </Pressable>
+      <Pressable
+          style={{ alignItems: 'center' }}
+          onPress={() => console.log("ok")}
+        >
+          <MaterialCommunityIcons name="theme-light-dark" size={24} color="white" />
+          <Text style={{ color: "#fff" }}>Dark mode</Text>
+      </Pressable>
+      <Pressable
+          style={{ alignItems: 'center' }}
+          onPress={() => console.log("ok")}
+        >
+          <Entypo name="language" size={24} color="white" />
+          <Text style={{ color: "#fff" }}>EN - ES</Text>
+      </Pressable>
+      <Pressable
+        style={{ alignItems: 'center' }}
+        onPress={() => {}}
+      >
+        <Ionicons name="timer-outline" size={24} color="white" />
+        <Text style={{ color: "#fff" }}>Time out</Text>
+      </Pressable>
+    </View>
+  </View>
   );
 }
 

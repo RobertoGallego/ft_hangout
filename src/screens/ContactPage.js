@@ -5,23 +5,41 @@ import { AntDesign } from '@expo/vector-icons'
 import { Feather } from '@expo/vector-icons'
 import { MaterialIcons } from '@expo/vector-icons'
 
-function ContactScreen({ route }) {
+
+function ContactScreen({ route, data, setData, navigation }) {
   const { contact } = route.params;
+
+  const removeContact = () => {
+    setData(data.filter(item => item.id !== contact.id))
+    navigation.navigate('Home')
+  }
+
+  const editContact = () => {
+    navigation.navigate('NewContact', {contact})
+  }
 
   return (
     <ScrollView keyboardShouldPersistTaps="true" style={{ backgroundColor: "#636363" }}>
       <View style={{ flex: 1, alignItems: 'center', justifyContent: 'space-around' }}>
         <View style={{ alignItems: 'center', paddingTop: 20 }}>
-          <Image 
-            source={{
-              uri: 'https://raw.githubusercontent.com/AboutReact/sampleresource/master/old_logo.png'
-            }} 
-            style={{width: 150, height: 150, borderRadius: 150 / 2}} 
-          />
+          { contact.image.length > 0 
+            ? <Image 
+                source={{
+                  uri: contact.image
+                }} 
+                style={{width: 150, height: 150, borderRadius: 150 / 2}} 
+              />
+            : <Image 
+                source={{
+                  uri: 'https://cdn-icons.flaticon.com/png/512/3899/premium/3899618.png?token=exp=1658327535~hmac=f72ddfcb626533c8ef556869dcc9b6a1'
+                }} 
+                style={{width: 150, height: 150, borderRadius: 150 / 2}} 
+              />
+          }
           <View style={{ borderRadius: 6, backgroundColor: '#6E6E6E', marginTop: 20, width: 350, alignItems: 'center'  }}>
-            <Text style={{ color: '#fff', fontSize: 25, marginTop: 10 }}>{contact.name}</Text>
+            <Text style={{ color: '#fff', fontSize: 25, marginTop: 10 }}>{contact.name + " " + contact.lastName}</Text>
             <Text style={{ color: '#fff', fontSize: 15, marginTop: 10 }}>E-mail</Text>
-            <Text style={{ color: '#fff', fontSize: 15 }}>margauxjosso25@gmail.com</Text>
+            <Text style={{ color: '#fff', fontSize: 15 }}>{contact.email}</Text>
             <Text style={{ color: '#fff', fontSize: 15, marginTop: 10  }}>Phone number</Text>
             <Text style={{ color: '#fff', fontSize: 25, marginBottom: 10 }}>{contact.number}</Text>
           </View>
@@ -44,10 +62,10 @@ function ContactScreen({ route }) {
             <Text style={{ color: '#fff', alignSelf: "center" }}>E-mail</Text>
           </TouchableOpacity>
         </View>
-        <TouchableOpacity style={{ borderRadius: 6, backgroundColor: '#6E6E6E', marginTop: 20, width: 350, alignItems: 'center'  }}>
+        <TouchableOpacity onPress={editContact} style={{ borderRadius: 6, backgroundColor: '#6E6E6E', marginTop: 20, width: 350, alignItems: 'center'  }}>
             <Text style={{ color: '#fff', fontSize: 15, marginVertical: 10 }}>Edit contact</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={{ borderRadius: 6, backgroundColor: '#C01B0E', marginTop: 5, width: 350, alignItems: 'center'  }}>
+        <TouchableOpacity onPress={removeContact} style={{ borderRadius: 6, backgroundColor: '#C01B0E', marginTop: 5, width: 350, alignItems: 'center'  }}>
             <Text style={{ color: '#fff', fontSize: 15, marginVertical: 10 }}>Delete contact</Text>
         </TouchableOpacity>
       </View>
