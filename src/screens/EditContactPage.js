@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { View, Text, ScrollView, Image, TouchableOpacity, TextInput } from 'react-native'
 import * as ImagePicker from 'expo-image-picker';
 
-function EditContactScreen({ navigation, offModal, generateUUID, setData, route, data }) {
+function EditContactScreen({ navigation, generateUUID, setData, route, data, colorsLight, translateApp }) {
   const { contact } = route.params
 
   useEffect(() => {
@@ -22,7 +22,6 @@ function EditContactScreen({ navigation, offModal, generateUUID, setData, route,
 
   const handleNewContact = () => {
     if (contact != undefined) {
-      
       setData(data.filter(item => item.id !== contact.id));
       setData(current => [...current, newContact])
       navigation.navigate('Home')
@@ -61,14 +60,13 @@ function EditContactScreen({ navigation, offModal, generateUUID, setData, route,
     if (!result.cancelled) {
       setNewContact((editContact) => ({...editContact, image: result.uri }))
     }
-    offModal(false)
   };
 
   return (
-    <ScrollView keyboardShouldPersistTaps="true" style={{ backgroundColor: "#636363" }}>
+    <ScrollView keyboardShouldPersistTaps="true" style={{ backgroundColor: colorsLight ? "#CFCFCF" : "#636363" }}>
       <View style={{ flex: 1, alignItems: 'center', justifyContent: 'space-around' }}>
         <View style={{ alignItems: 'center', paddingTop: 20 }}>
-        <TouchableOpacity title="Pick an image from camera roll" onPress={pickImage}>
+        <TouchableOpacity title={translateApp ? "Elige una imagen de tu camera roll" : "Pick an image from camera roll"} onPress={pickImage}>
           {newContact.image 
             ? <Image source={{ uri: newContact.image  }} style={{width: 150, height: 150, borderRadius: 150 / 2}}  />
             : <Image 
@@ -79,28 +77,32 @@ function EditContactScreen({ navigation, offModal, generateUUID, setData, route,
               />
           }
         </TouchableOpacity>
-          <View style={{ borderRadius: 6, backgroundColor: '#6E6E6E', marginTop: 20, width: 350, alignItems: 'center', paddingBottom: 20 }}>
-            <Text style={{ color: '#fff', fontSize: 18, marginTop: 10 }}>Given Name</Text>
+          <View style={{ borderRadius: 6, backgroundColor: colorsLight ? "#F1F1F1" : "#6E6E6E", marginTop: 20, width: 350, alignItems: 'center', paddingBottom: 20 }}>
+            <Text style={{ color: colorsLight ? '#494949' : '#fff', fontSize: 16, marginTop: 10 }}>{translateApp ? 'Nombre' : 'Given Name'}</Text>
             <TextInput
               placeholder="First name"
               maxLength={20}
               value={newContact.name}
               onChangeText={handleNameChange}
               textAlign="center"
+              placeholderTextColor={colorsLight ? '#494949' : '#fff'}
+              style={{ color: colorsLight ? '#494949' : '#fff', fontSize: 20, marginBottom: 10 }}
             />
             <View style={{ borderBottomColor: 'grey', width: 300, borderBottomWidth: 1}}/>
 
-            <Text style={{ color: '#fff', fontSize: 18, marginTop: 10 }}>Familly name</Text>
+            <Text style={{ color: colorsLight ? '#494949' : '#fff', fontSize: 16, marginTop: 10 }}>{translateApp ? 'Apellido' : 'Familly name'}</Text>
             <TextInput
               placeholder="Last name"
               maxLength={20}
               value={newContact.lastName}
               onChangeText={handleGivenNameChange}
               textAlign="center"
+              placeholderTextColor={colorsLight ? '#494949' : '#fff'}
+              style={{ color: colorsLight ? '#494949' : '#fff', fontSize: 20, marginBottom: 10 }}
             />
             <View style={{ borderBottomColor: 'grey', width: 300, borderBottomWidth: 1}}/>
             
-            <Text style={{ color: '#fff', fontSize: 18, marginTop: 10  }}>Phone number</Text>
+            <Text style={{ color: colorsLight ? '#494949' : '#fff', fontSize: 16, marginTop: 10  }}>{translateApp ? 'Numero de telefono' : 'Phone number'}</Text>
             <TextInput
               placeholder="ex: 09 05 45 75 88"
               maxLength={20}
@@ -108,10 +110,12 @@ function EditContactScreen({ navigation, offModal, generateUUID, setData, route,
               value={newContact.number}
               onChangeText={handleNumberChange}
               textAlign="center"
+              placeholderTextColor={colorsLight ? '#494949' : '#fff'}
+              style={{ color: colorsLight ? '#494949' : '#fff', fontSize: 20, marginBottom: 10 }}
             />
             <View style={{ borderBottomColor: 'grey', width: 300, borderBottomWidth: 1}}/>
 
-            <Text style={{ color: '#fff', fontSize: 18, marginTop: 10 }}>E-mail</Text>
+            <Text style={{ color: colorsLight ? '#494949' : '#fff', fontSize: 16, marginTop: 10 }}>E-mail</Text>
             <TextInput
               placeholder="Contact email"
               keyboardType={"email-address"}
@@ -119,12 +123,14 @@ function EditContactScreen({ navigation, offModal, generateUUID, setData, route,
               value={newContact.email}
               onChangeText={handleEmailChange}
               textAlign="center"
+              placeholderTextColor={colorsLight ? '#494949' : '#fff'}
+              style={{ color: colorsLight ? '#494949' : '#fff', fontSize: 20, marginBottom: 10 }}
             />
             <View style={{ borderBottomColor: 'grey', width: 300, borderBottomWidth: 1}}/>
           </View>
         </View>
-        <TouchableOpacity onPress={handleNewContact} style={{ borderRadius: 6, backgroundColor: '#388514', marginTop: 20, width: 350, alignItems: 'center'  }}>
-            <Text style={{ color: '#fff', fontSize: 18, marginVertical: 20 }}>Add contact</Text>
+        <TouchableOpacity onPress={handleNewContact} style={{ borderRadius: 6, backgroundColor: '#388514', marginTop: 12, width: 350, alignItems: 'center'  }}>
+            <Text style={{ color: '#fff', fontSize: 18, marginVertical: 10 }}>{contact ? "Enviar" : "Submit"}</Text>
         </TouchableOpacity>
       </View>
     </ScrollView>

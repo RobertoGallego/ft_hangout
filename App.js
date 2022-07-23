@@ -1,5 +1,5 @@
-import React, { useState } from 'react'
-import { Button } from 'react-native'
+import React, { useRef, useState, useEffect } from 'react'
+import { AppState } from 'react-native'
 import { NavigationContainer } from '@react-navigation/native'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import { Alert, Modal, StyleSheet, Text, Pressable, View } from "react-native"
@@ -49,7 +49,49 @@ export default function App() {
     },
   ]);
 
-  const [modalVisible, setModalVisible] = useState(false);
+  const appState = useRef(AppState.currentState);
+  const [appStateVisible, setAppStateVisible] = useState(appState.current);
+  const [translateApp, setTranslateApp] = useState(false)
+  const [colorsLight, setColorsLight] = useState(false)
+  const [count, setCount] = useState(0)
+  const [timeBackground, setTimeBackground] = useState()
+
+  useEffect(() => {
+    const subscription = AppState.addEventListener("change", nextAppState => {
+      if ( 
+        appState.current.match(/inactive|background/) &&
+        nextAppState === "active"
+      ) {
+        // setCount(0)
+        console.log("App has come to the foreground!");
+        console.log(count + " " + timeBackground + " seconds inactive")
+      }
+
+      if (appState.current === 'inactive' || appState.current === 'background') {
+        // console.log("inactive")
+
+        // const timer = () => {
+        //   setCount(count + 1);
+        // }
+        // setTimeBackground(setInterval(timer, 1000))
+      }
+      
+      const timer = () => {
+          setCount(count + 1);
+        }
+      setTimeBackground(setInterval(timer, 1000))
+      console.log(count + " " + timeBackground + " seconds background")
+      appState.current = nextAppState;
+      setAppStateVisible(appState.current);
+      console.log("AppState", appState.current);
+    });
+
+    return () => {
+      setTimeBackground(0)
+      clearInterval(timeBackground);
+      subscription.remove();
+    };
+  }, [count]);
 
   return (
     <View style={{ flex: 1 }}>
@@ -60,95 +102,43 @@ export default function App() {
           screenOptions={{ headerShown: true, orientation: "all" }}
         >
           <Stack.Screen name="Home" options={({navigation}) => ({
-            title: 'Contacts',
+            title: translateApp ? 'Contactos' : 'Contacts',
             headerStyle: {
-              backgroundColor: '#989898',
+              backgroundColor: colorsLight ? '#F1F1F1' : '#494949',
             },
-            // headerRight: () => (
-            //   <View >
-            //     <Modal
-            //       animationType="fade"
-            //       hardwareAccelerated={true}
-            //       transparent={true}
-            //       visible={modalVisible}
-            //       onRequestClose={() => {
-            //         setModalVisible(!modalVisible);
-            //       }}
-            //     >
-            //       <View  style={{ backgroundColor: '#989898', alignItems: 'center', justifyContent: 'flex-start' }}>
-            //         <Pressable
-            //             style={{ width: 360, paddingVertical: 20, backgroundColor: '#BDBDBD', alignItems: 'center' }}
-            //             onPress={() => { setModalVisible(false), navigation.navigate('NewContact', {})}}
-            //           > 
-            //             <Entypo name="plus" size={24} color="black" />
-            //             <Text>New contact</Text>
-            //         </Pressable>
-            //         <Pressable
-            //             style={{ width: 360, paddingVertical: 20, backgroundColor: '#BABABA', alignItems: 'center' }}
-            //             onPress={() => console.log("ok")}
-            //           >
-            //             <MaterialCommunityIcons name="theme-light-dark" size={24} color="black" />
-            //             <Text>Dark mode</Text>
-            //         </Pressable>
-            //         <Pressable
-            //             style={{ width: 360, paddingVertical: 20, backgroundColor: '#BDBDBD', alignItems: 'center' }}
-            //             onPress={() => console.log("ok")}
-            //           >
-            //             <Entypo name="language" size={24} color="black" />
-            //             <Text>EN - ES</Text>
-            //         </Pressable>
-            //         <Pressable
-            //           style={{ width: 360, paddingVertical: 20, backgroundColor: '#BABABA', alignItems: 'center' }}
-            //           onPress={() => setModalVisible(!modalVisible)}
-            //         >
-            //           <AntDesign name="up" size={24} color="black" />
-            //           <Text>Hide Modal</Text>
-            //         </Pressable>
-            //       </View>
-            //     </Modal>
-            //     <Button
-            //       onPress={() => setModalVisible(true)}
-            //       title="Menu"
-            //       color={'#636363'}
-            //     />
-            //   </View>
-            // ),
             headerTitleStyle: {
               fontWeight: 'normal',
             },
-            headerTintColor: '#fff',
+            headerTintColor: colorsLight ? '#494949' : '#fff',
           })}>
-              {(props) => <HomeScreen {...props} data={contacts} setData={setContacts} />}
+              {(props) => <HomeScreen {...props} data={contacts} setData={setContacts} colorsLight={colorsLight} setColorsLight={setColorsLight} translateApp={translateApp} setTranslateApp={setTranslateApp}/>}
           </Stack.Screen>
           <Stack.Screen name="Contact" options={{
-            title: 'Contact',
+            title: translateApp ? 'Contacto' : 'Contact',
             headerStyle: {
-              backgroundColor: '#989898',
+              backgroundColor: colorsLight ? '#F1F1F1' : '#494949',
             },
-            headerTintColor: '#fff',
+            headerTintColor: colorsLight ? '#494949' : '#fff',
             headerTitleStyle: {
               fontWeight: 'normal',
             },
           }}>
-            {(props) => <ContactScreen {...props} data={contacts} setData={setContacts} />}
+            {(props) => <ContactScreen {...props} data={contacts} colorsLight={colorsLight} setData={setContacts} translateApp={translateApp} />}
           </Stack.Screen>
           <Stack.Screen name="NewContact" options={{
-            title: 'New Contact',
+            title: translateApp ? 'Mi Contacto' : 'My contact',
             headerStyle: {
-              backgroundColor: '#989898',
+              backgroundColor: colorsLight ? '#F1F1F1' : '#494949',
             },
-            headerTintColor: '#fff',
+            headerTintColor: colorsLight ? '#494949' : '#fff',
             headerTitleStyle: {
               fontWeight: 'normal',
             },
           }}>
-            {(props) => <EditContactScreen {...props} data={contacts} setData={setContacts} generateUUID={generateUUID(10)} offModal={setModalVisible}/>}
+            {(props) => <EditContactScreen {...props} data={contacts} setData={setContacts} colorsLight={colorsLight}  generateUUID={generateUUID(10)} translateApp={translateApp} />}
           </Stack.Screen>
         </Stack.Navigator>
       </NavigationContainer>
-    {/* <View>
-      <Text style={{ color: '#fff', fontSize: 15, marginTop: 10 }}>E-mail</Text>
-    </View> */}
     </View>
   )
 }

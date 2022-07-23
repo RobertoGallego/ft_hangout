@@ -5,18 +5,32 @@ import { Entypo } from '@expo/vector-icons'
 import { MaterialCommunityIcons } from '@expo/vector-icons'
 import { Ionicons } from '@expo/vector-icons'
 
-function HomeScreen({ navigation, data }) {
+function HomeScreen({ navigation, data, setColorsLight, colorsLight, setTranslateApp, translateApp }) {
   const strAscending = [...data].sort((a, b) =>
     a.name > b.name ? 1 : -1,
   )
 
+  const handleChangeColor = () => {
+    setColorsLight(!colorsLight)
+  }
+
+  const handleTranslateApp = () => {
+    setTranslateApp(!translateApp)
+  }
+
+  
+
   return (
     <View style={{ flex: 1 }}>
-    <ScrollView keyboardShouldPersistTaps="true" style={{ backgroundColor: "#636363" }}>
+    <ScrollView keyboardShouldPersistTaps="true" style={{ backgroundColor: colorsLight ? "#CFCFCF" : "#636363"  }}>
         {strAscending.flatMap((contact, index) => {
           return (
             <TouchableOpacity delayPressIn={30} style={{ flex: 1, width: "100%" }} key={index} onPress={() => navigation.navigate('Contact', {contact})}>
-              <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between", padding: 10, backgroundColor: index % 2 == 1 ? "#6E6E6E": "#636363" }}>
+              <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between", padding: 10, 
+                backgroundColor: colorsLight
+                  ? index % 2 == 1 ? "#F1F1F1": "#CFCFCF"
+                  : index % 2 == 1 ? "#6E6E6E": "#636363"
+                }}>
                 <View style={{ flexDirection: "row"}}>
                   { contact.image.length > 0 
                     ? <Image 
@@ -33,11 +47,11 @@ function HomeScreen({ navigation, data }) {
                       />
                   }
                   <View style={{ paddingHorizontal: 20 }}>
-                    <Text style={{ fontSize: 20, color: "#E8E8E8" }} >{contact.name}</Text>
-                    <Text style={{ color: "#E8E8E8" }}>{contact.number}</Text>
+                    <Text style={{ fontSize: 20, color: colorsLight ? "#494949" : "#E8E8E8" }} >{contact.name}</Text>
+                    <Text style={{ color: colorsLight ? "#494949" : "#E8E8E8" }}>{contact.number}</Text>
                   </View>
                 </View>
-                <AntDesign name="right" size={24} color="#E8E8E8" />
+                <AntDesign name="right" size={24} color={ colorsLight ? "#494949" :"#E8E8E8" } />
               </View>
               <View style={{flexDirection: 'row', alignItems: 'center', flex: 1, height: 1, backgroundColor: 'grey'}} />
             </TouchableOpacity>
@@ -45,34 +59,34 @@ function HomeScreen({ navigation, data }) {
         })}
       
     </ScrollView>
-    <View style={{ paddingVertical: 15, backgroundColor: '#989898', width: "100%", flexDirection: "row", justifyContent: "space-around" }}>
+    <View style={{ paddingVertical: 10, backgroundColor: colorsLight ? "#F1F1F1" : '#494949', width: "100%", flexDirection: "row", justifyContent: "space-around" }}>
       <Pressable
-          style={{ alignItems: 'center' }}
+          style={{ alignItems: 'center', flex: 1 }}
           onPress={() => { navigation.navigate('NewContact', {})}}
         > 
-          <Entypo name="plus" size={24} color="white" />
-          <Text style={{ color: "#fff" }}>New contact</Text>
+          <Entypo name="plus" size={24} color={colorsLight ? "#494949" : "white"} />
+          <Text style={{ color: colorsLight ? "#494949" : "#fff" }}>{translateApp ? 'Agregar' : 'Add'}</Text>
       </Pressable>
       <Pressable
-          style={{ alignItems: 'center' }}
-          onPress={() => console.log("ok")}
+          style={{ alignItems: 'center', flex: 1 }}
+          onPress={handleChangeColor}
         >
-          <MaterialCommunityIcons name="theme-light-dark" size={24} color="white" />
-          <Text style={{ color: "#fff" }}>Dark mode</Text>
+          <MaterialCommunityIcons name="theme-light-dark" size={24} color={colorsLight ? "#494949" : "white"} />
+          <Text style={{ color: colorsLight ? "#494949" : "#fff" }}>Dark mode</Text>
       </Pressable>
       <Pressable
-          style={{ alignItems: 'center' }}
-          onPress={() => console.log("ok")}
+          style={{ alignItems: 'center', flex: 1 }}
+          onPress={handleTranslateApp}
         >
-          <Entypo name="language" size={24} color="white" />
-          <Text style={{ color: "#fff" }}>EN - ES</Text>
+          <Entypo name="language" size={24} color={colorsLight ? "#494949" : "white"} />
+          <Text style={{ color: colorsLight ? "#494949" : "#fff" }}>{translateApp ? 'ES' : 'EN'}</Text>
       </Pressable>
       <Pressable
-        style={{ alignItems: 'center' }}
+        style={{ alignItems: 'center', flex: 1 }}
         onPress={() => {}}
       >
-        <Ionicons name="timer-outline" size={24} color="white" />
-        <Text style={{ color: "#fff" }}>Time out</Text>
+        <Ionicons name="timer-outline" size={24} color={colorsLight ? "#494949" : "white"} />
+        <Text style={{ color: colorsLight ? "#494949" : "#fff" }}>Time out</Text>
       </Pressable>
     </View>
   </View>

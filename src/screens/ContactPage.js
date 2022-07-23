@@ -6,7 +6,7 @@ import { Feather } from '@expo/vector-icons'
 import { MaterialIcons } from '@expo/vector-icons'
 
 
-function ContactScreen({ route, data, setData, navigation }) {
+function ContactScreen({ route, data, setData, navigation, colorsLight, translateApp }) {
   const { contact } = route.params;
 
   const removeContact = () => {
@@ -19,7 +19,7 @@ function ContactScreen({ route, data, setData, navigation }) {
   }
 
   return (
-    <ScrollView keyboardShouldPersistTaps="true" style={{ backgroundColor: "#636363" }}>
+    <ScrollView keyboardShouldPersistTaps="true" style={{ backgroundColor: colorsLight ? "#CFCFCF" : "#636363" }}>
       <View style={{ flex: 1, alignItems: 'center', justifyContent: 'space-around' }}>
         <View style={{ alignItems: 'center', paddingTop: 20 }}>
           { contact.image.length > 0 
@@ -36,37 +36,37 @@ function ContactScreen({ route, data, setData, navigation }) {
                 style={{width: 150, height: 150, borderRadius: 150 / 2}} 
               />
           }
-          <View style={{ borderRadius: 6, backgroundColor: '#6E6E6E', marginTop: 20, width: 350, alignItems: 'center'  }}>
-            <Text style={{ color: '#fff', fontSize: 25, marginTop: 10 }}>{contact.name + " " + contact.lastName}</Text>
-            <Text style={{ color: '#fff', fontSize: 15, marginTop: 10 }}>E-mail</Text>
-            <Text style={{ color: '#fff', fontSize: 15 }}>{contact.email}</Text>
-            <Text style={{ color: '#fff', fontSize: 15, marginTop: 10  }}>Phone number</Text>
-            <Text style={{ color: '#fff', fontSize: 25, marginBottom: 10 }}>{contact.number}</Text>
+          <View style={{ borderRadius: 6, backgroundColor: colorsLight ? "#F1F1F1" : "#6E6E6E", marginTop: 20, width: 350, alignItems: 'center'  }}>
+            <Text style={{ color: colorsLight ? '#494949' : '#fff', fontSize: 25, marginTop: 10 }}>{contact.name + " " + contact.lastName}</Text>
+            <Text style={{ color: colorsLight ? '#494949' : '#fff', fontSize: 15, marginTop: 10  }}>{translateApp ? 'Numero de telefono' : 'Phone number'}</Text>
+            <Text style={{ color: colorsLight ? '#494949' : '#fff', fontSize: 25 }}>{contact.number}</Text>
+            <Text style={{ color: colorsLight ? '#494949' : '#fff', fontSize: 15, marginTop: 10 }}>E-mail</Text>
+            <Text style={{ color: colorsLight ? '#494949' : '#fff', fontSize: 15, marginBottom: 10 }}>{contact.email}</Text>
           </View>
         </View>
         <View style={{ flexDirection: "row", alignItems: 'center', justifyContent: "space-evenly", width: "100%", paddingTop: 20 }}>
           <TouchableOpacity onPress={() => alert('This is a button!')} style={{ justifyContent: 'center', marginHorizontal: 5, backgroundColor: '#388514', borderRadius: 6, paddingVertical: 10, paddingHorizontal: 12, flex: 1 }}>
             <Ionicons name="call" size={24} style={{ color: '#fff', alignSelf: "center", marginBottom: 6 }}/>
-            <Text style={{ color: '#fff', alignSelf: "center" }}>Call</Text>
+            <Text style={{ color: '#fff', alignSelf: "center" }}>{translateApp ? 'Llamada' : 'Call'}</Text>
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => alert('This is a button!')} style={{ justifyContent: 'center', backgroundColor: '#6E6E6E', borderRadius: 6, paddingVertical: 10, paddingHorizontal: 12, flex: 1 }}>
-            <AntDesign name="message1" size={24} style={{ color: '#fff', alignSelf: "center", marginBottom: 6 }}/>
-            <Text style={{ color: '#fff', alignSelf: "center" }}>Message</Text>
+          <TouchableOpacity onPress={() => alert('This is a button!')} style={{ justifyContent: 'center', backgroundColor: colorsLight ? "#F1F1F1" : '#6E6E6E', borderRadius: 6, paddingVertical: 10, paddingHorizontal: 12, flex: 1 }}>
+            <AntDesign name="message1" size={24} style={{ color: colorsLight ? '#494949' : '#fff', alignSelf: "center", marginBottom: 6 }}/>
+            <Text style={{ color: colorsLight ? '#494949' : '#fff', alignSelf: "center" }}>{translateApp ? 'Mensaje' : 'Message'}</Text>
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => alert('This is a button!')} style={{ justifyContent: 'center', marginHorizontal: 5, backgroundColor: '#6E6E6E', borderRadius: 6, paddingVertical: 10, paddingHorizontal: 12, flex: 1 }}>
-            <Feather name="video" size={24} style={{ color: '#fff', alignSelf: "center", marginBottom: 6 }}/>
-            <Text style={{ color: '#fff', alignSelf: "center" }}>Video</Text>
+          <TouchableOpacity onPress={() => alert('This is a button!')} style={{ justifyContent: 'center', marginHorizontal: 5, backgroundColor: colorsLight ? "#F1F1F1" : '#6E6E6E', borderRadius: 6, paddingVertical: 10, paddingHorizontal: 12, flex: 1 }}>
+            <Feather name="video" size={24} style={{ color: colorsLight ? '#494949' : '#fff', alignSelf: "center", marginBottom: 6 }}/>
+            <Text style={{ color: colorsLight ? '#494949' : '#fff', alignSelf: "center" }}>Video</Text>
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => alert('This is a button!')} style={{ justifyContent: 'center', marginRight: 5, backgroundColor: '#6E6E6E', borderRadius: 6, paddingVertical: 10, paddingHorizontal: 12, flex: 1 }}>
-            <MaterialIcons name="alternate-email" size={24} style={{ color: '#fff', alignSelf: "center", marginBottom: 6 }}/>
-            <Text style={{ color: '#fff', alignSelf: "center" }}>E-mail</Text>
+          <TouchableOpacity onPress={() => alert('This is a button!')} style={{ justifyContent: 'center', marginRight: 5, backgroundColor: colorsLight ? "#F1F1F1" : '#6E6E6E', borderRadius: 6, paddingVertical: 10, paddingHorizontal: 12, flex: 1 }}>
+            <MaterialIcons name="alternate-email" size={24} style={{ color: colorsLight ? '#494949' : '#fff', alignSelf: "center", marginBottom: 6 }}/>
+            <Text style={{ color: colorsLight ? '#494949' : '#fff', alignSelf: "center" }}>E-mail</Text>
           </TouchableOpacity>
         </View>
-        <TouchableOpacity onPress={editContact} style={{ borderRadius: 6, backgroundColor: '#6E6E6E', marginTop: 20, width: 350, alignItems: 'center'  }}>
-            <Text style={{ color: '#fff', fontSize: 15, marginVertical: 10 }}>Edit contact</Text>
+        <TouchableOpacity onPress={editContact} style={{ borderRadius: 6, backgroundColor: colorsLight ? "#F1F1F1" : '#6E6E6E', marginTop: 20, width: 350, alignItems: 'center'  }}>
+            <Text style={{ color: colorsLight ? '#494949' : '#fff', fontSize: 15, marginVertical: 10 }}>{translateApp ? 'Editar contacto' : 'Edit contact'}</Text>
         </TouchableOpacity>
         <TouchableOpacity onPress={removeContact} style={{ borderRadius: 6, backgroundColor: '#C01B0E', marginTop: 5, width: 350, alignItems: 'center'  }}>
-            <Text style={{ color: '#fff', fontSize: 15, marginVertical: 10 }}>Delete contact</Text>
+            <Text style={{ color: '#fff', fontSize: 15, marginVertical: 10 }}>{translateApp ? 'Borrar contacto' : 'Delete contact'}</Text>
         </TouchableOpacity>
       </View>
     </ScrollView>
