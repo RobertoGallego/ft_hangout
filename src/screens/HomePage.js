@@ -5,7 +5,7 @@ import { Entypo } from '@expo/vector-icons'
 import { MaterialCommunityIcons } from '@expo/vector-icons'
 import { Ionicons } from '@expo/vector-icons'
 
-function HomeScreen({ navigation, data, setColorsLight, colorsLight, setTranslateApp, translateApp }) {
+function HomeScreen({ navigation, data, setColorsLight, colorsLight, setTranslateApp, translateApp, dataFromStore }) {
   const strAscending = [...data].sort((a, b) =>
     a.name > b.name ? 1 : -1,
   )
@@ -18,7 +18,17 @@ function HomeScreen({ navigation, data, setColorsLight, colorsLight, setTranslat
     setTranslateApp(!translateApp)
   }
 
-  
+  const handleBackgroundDate = () => {
+    const nowDateHours = new Date().getHours()
+    const nowDateMinutes = new Date().getMinutes()
+    const nowDateSeconds = new Date().getSeconds()
+
+    const timeOut = `${Math.abs(nowDateHours - dataFromStore.dataHours)} Hours ${Math.abs(nowDateMinutes - dataFromStore.dataMinutes)} Minutes ${Math.abs(nowDateSeconds - dataFromStore.dataSeconds)} Seconds`
+
+    alert(timeOut)
+    console.log(nowDateHours, dataFromStore.dataHours, nowDateMinutes, dataFromStore.dataMinutes , nowDateSeconds, dataFromStore.dataSeconds)
+    console.log(Math.abs(nowDateHours - dataFromStore.dataHours), "Hours", Math.abs(nowDateMinutes - dataFromStore.dataMinutes), "Minutes", Math.abs(nowDateSeconds - dataFromStore.dataSeconds), "Seconds")
+  }
 
   return (
     <View style={{ flex: 1 }}>
@@ -83,7 +93,7 @@ function HomeScreen({ navigation, data, setColorsLight, colorsLight, setTranslat
       </Pressable>
       <Pressable
         style={{ alignItems: 'center', flex: 1 }}
-        onPress={() => {}}
+        onPress={handleBackgroundDate}
       >
         <Ionicons name="timer-outline" size={24} color={colorsLight ? "#494949" : "white"} />
         <Text style={{ color: colorsLight ? "#494949" : "#fff" }}>Time out</Text>
