@@ -43,13 +43,13 @@ function ContactScreen({ route, data, setData, navigation, colorsLight, translat
   };
   
   useEffect(() => {
-    (async () => {
-      const { status } = await Contacts.requestPermissionsAsync();
-      if (status === 'granted') {
-        const contactId = await Contacts.addContactAsync(addContact);
-        console.log(contactId)
-      }
-    })();
+    // (async () => {
+    //   const { status } = await Contacts.requestPermissionsAsync();
+    //   if (status === 'granted') {
+    //     const contactId = await Contacts.addContactAsync(addContact);
+    //     console.log(contactId)
+    //   }
+    // })();
   }, []);
 
 
