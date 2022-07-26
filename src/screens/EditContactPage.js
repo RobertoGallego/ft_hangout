@@ -26,7 +26,6 @@ function EditContactScreen({ navigation, generateUUID, setData, route, data, col
       setData(current => [...current, newContact])
       navigation.navigate('Home')
     } else {
-      console.log("gg")
       setNewContact((editContact) => ({...editContact, id: generateUUID }))
       setData(current => [...current, newContact])
       navigation.navigate('Home')

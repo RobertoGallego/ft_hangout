@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import { ScrollView, View, Text, Image, TouchableOpacity, Pressable } from 'react-native'
 import { AntDesign } from '@expo/vector-icons'
 import { Entypo } from '@expo/vector-icons' 
 import { MaterialCommunityIcons } from '@expo/vector-icons'
 import { Ionicons } from '@expo/vector-icons'
 
-function HomeScreen({ navigation, data, setColorsLight, colorsLight, setTranslateApp, translateApp, dataFromStore, count, setCount }) {
+function HomeScreen({ navigation, data, setColorsLight, colorsLight, setTranslateApp, translateApp, count, setCount }) {
   const strAscending = [...data].sort((a, b) =>
     a.name > b.name ? 1 : -1,
   )

@@ -7,6 +7,7 @@ import { Alert, Modal, StyleSheet, Text, Pressable, View } from "react-native"
 import { Entypo } from '@expo/vector-icons' 
 import { MaterialCommunityIcons } from '@expo/vector-icons'
 import { AntDesign } from '@expo/vector-icons'
+import * as Contacts from 'expo-contacts';
 
 import HomeScreen from './src/screens/HomePage'
 import ContactScreen from './src/screens/ContactPage'
@@ -63,7 +64,7 @@ export default function App() {
       const jsonValue = JSON.stringify(value)
       await AsyncStorage.setItem('@storage_Key', jsonValue)
     } catch (e) {
-      // saving error
+      console.error(e)
     }
   }
   
@@ -84,7 +85,7 @@ export default function App() {
       console.log(jsonValue, dataFromStore)
       return jsonValue != null ? JSON.parse(jsonValue) : null;
     } catch(e) {
-      // error reading value
+      console.error(e)
     }
   }
 
@@ -125,6 +126,21 @@ export default function App() {
       subscription.remove();
     };
   }, [count]);
+
+  useEffect(() => {
+    (async () => {
+      const { status } = await Contacts.requestPermissionsAsync();
+      if (status === 'granted') {
+        const { data } = await Contacts.getContactsAsync({
+          fields: [Contacts.Fields.Emails],
+        });
+
+        if (data.length > 0) {
+          const contact = data[0];
+        }
+      }
+    })();
+  }, []);
 
   return (
     <View style={{ flex: 1 }}>

@@ -1,4 +1,4 @@
-import * as React from 'react'
+import React, { useEffect } from 'react'
 import { View, Text, ScrollView, Image, TouchableOpacity } from 'react-native'
 import { Ionicons } from '@expo/vector-icons'
 import { AntDesign } from '@expo/vector-icons'
@@ -6,6 +6,7 @@ import { Feather } from '@expo/vector-icons'
 import { MaterialIcons } from '@expo/vector-icons'
 import * as SMS from 'expo-sms'
 import {Linking} from 'react-native'
+import * as Contacts from 'expo-contacts';
 
 function ContactScreen({ route, data, setData, navigation, colorsLight, translateApp }) {
   const { contact } = route.params;
@@ -14,16 +15,41 @@ function ContactScreen({ route, data, setData, navigation, colorsLight, translat
 
   const onComposeSms = React.useCallback(async () => {
     if (smsAvailable) {
-      console.log('going for it!');
       await SMS.sendSMSAsync(
-        undefined,
-        'This is my precomposed message!',
+        contact.number,
+        'This is my message',
       );
     }
   }, [smsAvailable]);
 
   React.useEffect(() => {
     SMS.isAvailableAsync().then(setSmsAvailable);
+  }, []);
+
+  const addContact = {
+    [Contacts.Fields.FirstName]: 'Nathaly',
+    [Contacts.Fields.LastName]: 'Gallego',
+    [Contacts.Fields.PhoneNumbers]: [
+      {
+          number: '(81) 8420-0123',
+          isPrimary: true,
+          digits: `8184200123`,
+          countryCode: '+52',
+          id: `JJJ-UNIQUE`,
+          label: `JJJ`,
+      },
+    ],
+    [Contacts.Fields.Emails]: 'Nathaly@example.com',
+  };
+  
+  useEffect(() => {
+    (async () => {
+      const { status } = await Contacts.requestPermissionsAsync();
+      if (status === 'granted') {
+        const contactId = await Contacts.addContactAsync(addContact);
+        console.log(contactId)
+      }
+    })();
   }, []);
 
 
@@ -35,6 +61,8 @@ function ContactScreen({ route, data, setData, navigation, colorsLight, translat
   const editContact = () => {
     navigation.navigate('NewContact', {contact})
   }
+
+  
 
   return (
     <ScrollView keyboardShouldPersistTaps="true" style={{ backgroundColor: colorsLight ? "#CFCFCF" : "#636363" }}>
@@ -75,7 +103,7 @@ function ContactScreen({ route, data, setData, navigation, colorsLight, translat
             <Feather name="video" size={24} style={{ color: colorsLight ? '#494949' : '#fff', alignSelf: "center", marginBottom: 6 }}/>
             <Text style={{ color: colorsLight ? '#494949' : '#fff', alignSelf: "center" }}>Video</Text>
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => Linking.openURL(`'mailto:${contact.email}`)} style={{ justifyContent: 'center', marginRight: 5, backgroundColor: colorsLight ? "#F1F1F1" : '#6E6E6E', borderRadius: 6, paddingVertical: 10, paddingHorizontal: 12, flex: 1 }}>
+          <TouchableOpacity onPress={() => Linking.openURL(`mailto:${contact.email}`)} style={{ justifyContent: 'center', marginRight: 5, backgroundColor: colorsLight ? "#F1F1F1" : '#6E6E6E', borderRadius: 6, paddingVertical: 10, paddingHorizontal: 12, flex: 1 }}>
             <MaterialIcons name="alternate-email" size={24} style={{ color: colorsLight ? '#494949' : '#fff', alignSelf: "center", marginBottom: 6 }}/>
             <Text style={{ color: colorsLight ? '#494949' : '#fff', alignSelf: "center" }}>E-mail</Text>
           </TouchableOpacity>
