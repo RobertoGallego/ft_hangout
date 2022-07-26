@@ -4,10 +4,28 @@ import { Ionicons } from '@expo/vector-icons'
 import { AntDesign } from '@expo/vector-icons'
 import { Feather } from '@expo/vector-icons'
 import { MaterialIcons } from '@expo/vector-icons'
-
+import * as SMS from 'expo-sms'
+import {Linking} from 'react-native'
 
 function ContactScreen({ route, data, setData, navigation, colorsLight, translateApp }) {
   const { contact } = route.params;
+
+  const [smsAvailable, setSmsAvailable] = React.useState(false);
+
+  const onComposeSms = React.useCallback(async () => {
+    if (smsAvailable) {
+      console.log('going for it!');
+      await SMS.sendSMSAsync(
+        undefined,
+        'This is my precomposed message!',
+      );
+    }
+  }, [smsAvailable]);
+
+  React.useEffect(() => {
+    SMS.isAvailableAsync().then(setSmsAvailable);
+  }, []);
+
 
   const removeContact = () => {
     setData(data.filter(item => item.id !== contact.id))
@@ -45,19 +63,19 @@ function ContactScreen({ route, data, setData, navigation, colorsLight, translat
           </View>
         </View>
         <View style={{ flexDirection: "row", alignItems: 'center', justifyContent: "space-evenly", width: "100%", paddingTop: 20 }}>
-          <TouchableOpacity onPress={() => alert('This is a button!')} style={{ justifyContent: 'center', marginHorizontal: 5, backgroundColor: '#388514', borderRadius: 6, paddingVertical: 10, paddingHorizontal: 12, flex: 1 }}>
+          <TouchableOpacity onPress={() => {Linking.openURL(`tel:${contact.number}`)}} style={{ justifyContent: 'center', marginHorizontal: 5, backgroundColor: '#388514', borderRadius: 6, paddingVertical: 10, paddingHorizontal: 12, flex: 1 }}>
             <Ionicons name="call" size={24} style={{ color: '#fff', alignSelf: "center", marginBottom: 6 }}/>
             <Text style={{ color: '#fff', alignSelf: "center" }}>{translateApp ? 'Llamada' : 'Call'}</Text>
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => alert('This is a button!')} style={{ justifyContent: 'center', backgroundColor: colorsLight ? "#F1F1F1" : '#6E6E6E', borderRadius: 6, paddingVertical: 10, paddingHorizontal: 12, flex: 1 }}>
+          <TouchableOpacity onPress={() => {Linking.openURL(`sms://${contact.number}`)}} style={{ justifyContent: 'center', backgroundColor: colorsLight ? "#F1F1F1" : '#6E6E6E', borderRadius: 6, paddingVertical: 10, paddingHorizontal: 12, flex: 1 }}>
             <AntDesign name="message1" size={24} style={{ color: colorsLight ? '#494949' : '#fff', alignSelf: "center", marginBottom: 6 }}/>
             <Text style={{ color: colorsLight ? '#494949' : '#fff', alignSelf: "center" }}>{translateApp ? 'Mensaje' : 'Message'}</Text>
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => alert('This is a button!')} style={{ justifyContent: 'center', marginHorizontal: 5, backgroundColor: colorsLight ? "#F1F1F1" : '#6E6E6E', borderRadius: 6, paddingVertical: 10, paddingHorizontal: 12, flex: 1 }}>
+          <TouchableOpacity onPress={() => Linking.openURL(`whatsapp://send?phone=${contact.number}`)} style={{ justifyContent: 'center', marginHorizontal: 5, backgroundColor: colorsLight ? "#F1F1F1" : '#6E6E6E', borderRadius: 6, paddingVertical: 10, paddingHorizontal: 12, flex: 1 }}>
             <Feather name="video" size={24} style={{ color: colorsLight ? '#494949' : '#fff', alignSelf: "center", marginBottom: 6 }}/>
             <Text style={{ color: colorsLight ? '#494949' : '#fff', alignSelf: "center" }}>Video</Text>
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => alert('This is a button!')} style={{ justifyContent: 'center', marginRight: 5, backgroundColor: colorsLight ? "#F1F1F1" : '#6E6E6E', borderRadius: 6, paddingVertical: 10, paddingHorizontal: 12, flex: 1 }}>
+          <TouchableOpacity onPress={() => Linking.openURL(`'mailto:${contact.email}`)} style={{ justifyContent: 'center', marginRight: 5, backgroundColor: colorsLight ? "#F1F1F1" : '#6E6E6E', borderRadius: 6, paddingVertical: 10, paddingHorizontal: 12, flex: 1 }}>
             <MaterialIcons name="alternate-email" size={24} style={{ color: colorsLight ? '#494949' : '#fff', alignSelf: "center", marginBottom: 6 }}/>
             <Text style={{ color: colorsLight ? '#494949' : '#fff', alignSelf: "center" }}>E-mail</Text>
           </TouchableOpacity>

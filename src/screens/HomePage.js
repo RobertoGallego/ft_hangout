@@ -5,7 +5,7 @@ import { Entypo } from '@expo/vector-icons'
 import { MaterialCommunityIcons } from '@expo/vector-icons'
 import { Ionicons } from '@expo/vector-icons'
 
-function HomeScreen({ navigation, data, setColorsLight, colorsLight, setTranslateApp, translateApp, dataFromStore }) {
+function HomeScreen({ navigation, data, setColorsLight, colorsLight, setTranslateApp, translateApp, dataFromStore, count, setCount }) {
   const strAscending = [...data].sort((a, b) =>
     a.name > b.name ? 1 : -1,
   )
@@ -17,18 +17,19 @@ function HomeScreen({ navigation, data, setColorsLight, colorsLight, setTranslat
   const handleTranslateApp = () => {
     setTranslateApp(!translateApp)
   }
+  
 
   const handleBackgroundDate = () => {
-    const nowDateHours = new Date().getHours()
-    const nowDateMinutes = new Date().getMinutes()
-    const nowDateSeconds = new Date().getSeconds()
-
-    const timeOut = `${Math.abs(nowDateHours - dataFromStore.dataHours)} Hours ${Math.abs(nowDateMinutes - dataFromStore.dataMinutes)} Minutes ${Math.abs(nowDateSeconds - dataFromStore.dataSeconds)} Seconds`
-
-    alert(timeOut)
-    console.log(nowDateHours, dataFromStore.dataHours, nowDateMinutes, dataFromStore.dataMinutes , nowDateSeconds, dataFromStore.dataSeconds)
-    console.log(Math.abs(nowDateHours - dataFromStore.dataHours), "Hours", Math.abs(nowDateMinutes - dataFromStore.dataMinutes), "Minutes", Math.abs(nowDateSeconds - dataFromStore.dataSeconds), "Seconds")
+    alert(`You was ${count} seconds inactive`)
   }
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCount(count + 1);
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, [count])
 
   return (
     <View style={{ flex: 1 }}>

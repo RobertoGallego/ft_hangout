@@ -48,6 +48,14 @@ export default function App() {
       number: "0645678957",
       image: "",
     },
+    { 
+      id: generateUUID(10),
+      name: "Rosalie",
+      lastName: "Aguillon",
+      email: "Rosalie@gmail.com",
+      number: "0698472546",
+      image: "",
+    },
   ]);
 
   const storeData = async (value) => {
@@ -62,7 +70,7 @@ export default function App() {
   const [dataFromStore, setDataFromStore] = useState({
     dataHours: 0,
     dataMinutes: 0,
-    dataSeconds: 0
+    dataSeconds: 0,
   })
 
   const getData = async () => {
@@ -71,7 +79,7 @@ export default function App() {
       setDataFromStore({ 
         dataHours: JSON.parse(jsonValue).dateHours, 
         dataMinutes: JSON.parse(jsonValue).dateMinutes, 
-        dataSeconds: JSON.parse(jsonValue).dateSeconds 
+        dataSeconds: JSON.parse(jsonValue).dateSeconds,
       })
       console.log(jsonValue, dataFromStore)
       return jsonValue != null ? JSON.parse(jsonValue) : null;
@@ -79,31 +87,6 @@ export default function App() {
       // error reading value
     }
   }
-  
-
-
-  useEffect(() => {
-    //storeData({ asdf: 'asdf' })
-
-
-    // Important
-    // const dateBackgroundHours = new Date().getHours()
-    // const dateBackgroundMinutes = new Date().getMinutes()
-    // const dateBackgroundSeconds = new Date().getSeconds()
-
-    // storeData({ dateHours: dateBackgroundHours, dateMinutes: dateBackgroundMinutes, dateSeconds: dateBackgroundSeconds})
-    // const { dataHours, dateMinutes, dateSeconds } = getData()
-
-      const nowDateHours = new Date().getHours()
-      const nowDateMinutes = new Date().getMinutes()
-      const nowDateSeconds = new Date().getSeconds()
-      getData()
-      // setInterval(() => {
-      //   console.log()
-
-      // console.log(dataHours - nowDateHours + ":" + dateMinutes - nowDateMinutes + ":" + dateSeconds - nowDateSeconds)
-    // }, 5000)
-  }, [])
 
   const appState = useRef(AppState.currentState);
   const [appStateVisible, setAppStateVisible] = useState(appState.current);
@@ -118,37 +101,22 @@ export default function App() {
         appState.current.match(/inactive|background/) &&
         nextAppState === "active"
       ) {
-        // setCount(0)
-        console.log("App has come to the foreground!");
-        // console.log(count + " " + timeBackground + " seconds inactive")
-      }
-
-      if (appState.current === 'inactive' || appState.current === 'background') {
-        // console.log("inactive")
-
-        // const timer = () => {
-        //   setCount(count + 1);
-        // }
-        // setTimeBackground(setInterval(timer, 1000))
+        setCount(0)
       }
 
       const dateBackgroundHours = new Date().getHours()
       const dateBackgroundMinutes = new Date().getMinutes()
       const dateBackgroundSeconds = new Date().getSeconds()
 
-      storeData({ dateHours: dateBackgroundHours, dateMinutes: dateBackgroundMinutes, dateSeconds: dateBackgroundSeconds})
-
-      // const dateBackground = new Date().getTime()
-      // storeData({ datex: dateBackground})
-      // console.log(dateBackground)
-      // const timer = () => {
-      //     setCount(count + 1);
-      //   }
-      // setTimeBackground(setInterval(timer, 1000))
-      //console.log(count + " " + timeBackground + " seconds background")
+      storeData({ 
+        dateHours: dateBackgroundHours, 
+        dateMinutes: dateBackgroundMinutes, 
+        dateSeconds: dateBackgroundSeconds, 
+      })
+      setCount(0)
       appState.current = nextAppState;
       setAppStateVisible(appState.current);
-      console.log("AppState", appState.current);
+      // console.log("AppState", appState.current);
     });
 
     return () => {
@@ -176,7 +144,7 @@ export default function App() {
             },
             headerTintColor: colorsLight ? '#494949' : '#fff',
           })}>
-              {(props) => <HomeScreen {...props} data={contacts} setData={setContacts} colorsLight={colorsLight} setColorsLight={setColorsLight} translateApp={translateApp} setTranslateApp={setTranslateApp} dataFromStore={dataFromStore}/>}
+              {(props) => <HomeScreen {...props} count={count} setCount={setCount} data={contacts} setData={setContacts} colorsLight={colorsLight} setColorsLight={setColorsLight} translateApp={translateApp} setTranslateApp={setTranslateApp} dataFromStore={dataFromStore}/>}
           </Stack.Screen>
           <Stack.Screen name="Contact" options={{
             title: translateApp ? 'Contacto' : 'Contact',
