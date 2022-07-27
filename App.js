@@ -69,20 +69,20 @@ export default function App() {
   }
   
   const [dataFromStore, setDataFromStore] = useState({
-    dataHours: 0,
-    dataMinutes: 0,
-    dataSeconds: 0,
+    dataTimeBackground: 0,
+  })
+
+  const [dataFromStores, setDataFromStores] = useState({
+    dataTimeBackgroundss: 0,
   })
 
   const getData = async () => {
     try {
       const jsonValue = await AsyncStorage.getItem('@storage_Key')
       setDataFromStore({ 
-        dataHours: JSON.parse(jsonValue).dateHours, 
-        dataMinutes: JSON.parse(jsonValue).dateMinutes, 
-        dataSeconds: JSON.parse(jsonValue).dateSeconds,
+        dataTimeBackground: JSON.parse(jsonValue).dateBackground, 
       })
-      console.log(jsonValue, dataFromStore)
+      // console.log(jsonValue, dataFromStore)
       return jsonValue != null ? JSON.parse(jsonValue) : null;
     } catch(e) {
       console.error(e)
@@ -94,7 +94,7 @@ export default function App() {
   const [translateApp, setTranslateApp] = useState(false)
   const [colorsLight, setColorsLight] = useState(false)
   const [count, setCount] = useState(0)
-  const [timeBackground, setTimeBackground] = useState()
+  const [timerForBackground, setTimerForBackground] = useState()
 
   useEffect(() => {
     const subscription = AppState.addEventListener("change", nextAppState => {
@@ -102,27 +102,32 @@ export default function App() {
         appState.current.match(/inactive|background/) &&
         nextAppState === "active"
       ) {
-        setCount(0)
+        const getData = async () => {
+          try {
+            const jsonValue = await AsyncStorage.getItem('@storage_Key')
+            var endDate   = new Date();
+            setTimerForBackground((endDate.getTime() - JSON.parse(jsonValue).dateBackground) / 1000)
+            // console.log("okaA 2", endDate.getTime() , dataFromStore.dataTimeBackground, seconds )
+            // return jsonValue != null ? JSON.parse(jsonValue) : null;
+          } catch(e) {
+            console.error(e)
+          }
+        }
+        getData()
       }
 
-      const dateBackgroundHours = new Date().getHours()
-      const dateBackgroundMinutes = new Date().getMinutes()
-      const dateBackgroundSeconds = new Date().getSeconds()
-
-      storeData({ 
-        dateHours: dateBackgroundHours, 
-        dateMinutes: dateBackgroundMinutes, 
-        dateSeconds: dateBackgroundSeconds, 
-      })
-      setCount(0)
+      else if ( 
+        appState.current.match(/active/) &&
+        nextAppState === "inactive" || nextAppState === "background"
+      ) {
+        storeData({ 
+          dateBackground: new Date().getTime(), 
+        })
+      }
       appState.current = nextAppState;
-      setAppStateVisible(appState.current);
-      // console.log("AppState", appState.current);
     });
 
     return () => {
-      setTimeBackground(0)
-      clearInterval(timeBackground);
       subscription.remove();
     };
   }, [count]);
@@ -151,7 +156,7 @@ export default function App() {
           screenOptions={{ headerShown: true, orientation: "all" }}
         >
           <Stack.Screen name="Home" options={({navigation}) => ({
-            title: translateApp ? 'Contactos' : 'Contacts',
+            title: translateApp ? 'Mi lista' : 'My list',
             headerStyle: {
               backgroundColor: colorsLight ? '#F1F1F1' : '#494949',
             },
@@ -159,8 +164,11 @@ export default function App() {
               fontWeight: 'normal',
             },
             headerTintColor: colorsLight ? '#494949' : '#fff',
+            headerRight: () => (
+              <Text style={{ color: '#fff', alignSelf: 'center', justifyContent: 'center', alignItems: 'center', fontSize: 18 }}>{contacts.length} {translateApp ? 'Contactos' : 'Contacts'}</Text>
+            ),
           })}>
-              {(props) => <HomeScreen {...props} count={count} setCount={setCount} data={contacts} setData={setContacts} colorsLight={colorsLight} setColorsLight={setColorsLight} translateApp={translateApp} setTranslateApp={setTranslateApp} dataFromStore={dataFromStore}/>}
+              {(props) => <HomeScreen {...props} count={count} setCount={setCount} data={contacts} setData={setContacts} colorsLight={colorsLight} setColorsLight={setColorsLight} translateApp={translateApp} setTranslateApp={setTranslateApp} dataFromStore={dataFromStore} timerForBackground={timerForBackground}/>}
           </Stack.Screen>
           <Stack.Screen name="Contact" options={{
             title: translateApp ? 'Contacto' : 'Contact',

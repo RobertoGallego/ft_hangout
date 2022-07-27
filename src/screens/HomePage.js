@@ -5,7 +5,7 @@ import { Entypo } from '@expo/vector-icons'
 import { MaterialCommunityIcons } from '@expo/vector-icons'
 import { Ionicons } from '@expo/vector-icons'
 
-function HomeScreen({ navigation, data, setColorsLight, colorsLight, setTranslateApp, translateApp, count, setCount }) {
+function HomeScreen({ navigation, data, setColorsLight, colorsLight, setTranslateApp, translateApp, count, setCount, timerForBackground }) {
   const strAscending = [...data].sort((a, b) =>
     a.name > b.name ? 1 : -1,
   )
@@ -20,7 +20,8 @@ function HomeScreen({ navigation, data, setColorsLight, colorsLight, setTranslat
   
 
   const handleBackgroundDate = () => {
-    alert(`You was ${count} seconds inactive`)
+    if (timerForBackground)
+      alert(`You was ${timerForBackground} seconds inactive`)
   }
 
   useEffect(() => {
