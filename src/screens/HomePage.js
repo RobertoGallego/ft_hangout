@@ -1,9 +1,10 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { ScrollView, View, Text, Image, TouchableOpacity, Pressable } from 'react-native'
 import { AntDesign } from '@expo/vector-icons'
 import { Entypo } from '@expo/vector-icons' 
 import { MaterialCommunityIcons } from '@expo/vector-icons'
 import { Ionicons } from '@expo/vector-icons'
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 function HomeScreen({ navigation, data, setColorsLight, colorsLight, setTranslateApp, translateApp, count, setCount, timerForBackground }) {
   const strAscending = [...data].sort((a, b) =>

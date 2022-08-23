@@ -13,6 +13,9 @@ function ContactScreen({ route, data, setData, navigation, colorsLight, translat
 
   const [smsAvailable, setSmsAvailable] = React.useState(false);
 
+    
+  
+
   const onComposeSms = React.useCallback(async () => {
     if (smsAvailable) {
       await SMS.sendSMSAsync(
@@ -23,7 +26,20 @@ function ContactScreen({ route, data, setData, navigation, colorsLight, translat
   }, [smsAvailable]);
 
   React.useEffect(() => {
-    SMS.isAvailableAsync().then(setSmsAvailable);
+
+    const getSMS = async () => {
+      const isAvailable = await SMS.isAvailableAsync();
+      if (isAvailable) {
+        console.log(isAvailable)
+        // do your SMS stuff here
+      } else {
+        // misfortune... there's no SMS available on this device
+      }
+      // SMS.isAvailableAsync().then(setSmsAvailable);
+    }
+
+    getSMS()
+
   }, []);
 
   const addContact = {
